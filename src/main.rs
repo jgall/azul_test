@@ -79,7 +79,18 @@ fn step_daemon(
     _app_resources: &mut AppResources,
 ) -> (UpdateScreen, TerminateDaemon) {
     println!("running");
-    state.mesh.step(0.01);
+    if let Some(dragging) = &state.dragging {
+        let (x, y) = {
+            let p = dragging.read().unwrap();
+            (p.x.clone(), p.y.clone())
+        };
+        state.mesh.step(0.01);
+        let mut p = dragging.write().unwrap();
+        p.x = x;
+        p.y = y;
+    } else {
+        state.mesh.step(0.01);
+    }
     (UpdateScreen::Redraw, TerminateDaemon::Continue)
 }
 
