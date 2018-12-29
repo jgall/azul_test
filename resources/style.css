@@ -1,0 +1,23 @@
+* {
+    font-size: 27px;
+    font-family: Helvetica;
+    align-items: center;
+    justify-content: center;
+}
+
+.myButton {
+    background-color: #0000CD;
+    border-radius: 200px;
+    width: 200px;
+    margin: 5px;
+}
+
+.particle {
+    background-color: #444444;
+    position: absolute;
+    top: [[top_pos | 0px]];
+    left: [[left_pos | 0px]];
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
