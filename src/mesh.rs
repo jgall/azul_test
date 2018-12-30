@@ -95,7 +95,7 @@ impl Mesh {
         let edges = particles
             .iter()
             .enumerate()
-            .filter(|(i, p)| {
+            .filter(|(i, _p)| {
                 *i < rows as usize
                     || *i % cols as usize == 0
                     || *i > (cols * (rows - 1)) as usize
