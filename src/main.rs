@@ -98,7 +98,7 @@ fn main() {
     //let app = App::new(state::CounterApplication::default(), AppConfig::default());
     let app = App::new(
         MeshApp {
-            mesh: mesh::Mesh::new_grid(15.0, 20.0, 20.0, 10, 10),
+            mesh: mesh::Mesh::new_grid(15.0, 20.0, 20.0, 20, 20),
             dragging: None,
         },
         AppConfig::default(),

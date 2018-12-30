@@ -77,7 +77,7 @@ impl Mesh {
                         p1: p1.clone(),
                         p2: p2.clone(),
                         base_len: p1.read().unwrap().distance(&p2.read().unwrap()),
-                        k: 1.0,
+                        k: 0.5,
                     });
                 }
                 if row > 0 {
@@ -87,8 +87,31 @@ impl Mesh {
                         p1: p1.clone(),
                         p2: p2.clone(),
                         base_len: p1.read().unwrap().distance(&p2.read().unwrap()),
-                        k: 1.0,
+                        k: 0.5,
                     });
+                }
+            }
+        }
+        let edges = particles
+            .iter()
+            .enumerate()
+            .filter(|(i, p)| {
+                *i < rows as usize
+                    || *i % cols as usize == 0
+                    || *i > (cols * (rows - 1)) as usize
+                    || *i % cols as usize == cols as usize - 1
+            })
+            .collect::<Vec<_>>();
+        for (i1, particle) in particles.iter().enumerate() {
+            for (i2, edge) in &edges {
+                if i1 != *i2 {
+                    let base_len = particle.read().unwrap().distance(&edge.read().unwrap());
+                    springs.push(Spring {
+                        p1: particle.clone(),
+                        p2: (*edge).clone(),
+                        base_len: base_len,
+                        k: 10.0 / (base_len * base_len),
+                    })
                 }
             }
         }
