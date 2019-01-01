@@ -77,7 +77,7 @@ impl Mesh {
                         p1: p1.clone(),
                         p2: p2.clone(),
                         base_len: p1.read().unwrap().distance(&p2.read().unwrap()),
-                        k: 0.5,
+                        k: 0.8,
                     });
                 }
                 if row > 0 {
@@ -87,7 +87,7 @@ impl Mesh {
                         p1: p1.clone(),
                         p2: p2.clone(),
                         base_len: p1.read().unwrap().distance(&p2.read().unwrap()),
-                        k: 0.5,
+                        k: 0.8,
                     });
                 }
             }
@@ -110,7 +110,7 @@ impl Mesh {
                         p1: particle.clone(),
                         p2: (*edge).clone(),
                         base_len: base_len,
-                        k: 10.0 / (base_len * base_len),
+                        k: 5.0 / (base_len * base_len),
                     })
                 }
             }
@@ -119,7 +119,7 @@ impl Mesh {
             particles: particles,
             springs: springs,
             max_vel: 100.0,
-            damping: 0.1,
+            damping: 0.04,
         }
     }
 }
