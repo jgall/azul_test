@@ -1,4 +1,5 @@
-use std::sync::{Arc, RwLock};
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use super::mesh::*;
 
@@ -9,5 +10,5 @@ pub enum MeshApp {
 
 pub struct MeshAppState {
     pub mesh: Mesh,
-    pub dragging: Option<Arc<RwLock<Particle>>>,
+    pub dragging: Option<Rc<RefCell<Particle>>>,
 }

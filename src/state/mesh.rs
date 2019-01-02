@@ -1,4 +1,5 @@
-use std::sync::{Arc, RwLock};
+use std::cell::RefCell;
+use std::rc::Rc;
 
 pub struct Particle {
     pub x: f64,
@@ -16,14 +17,14 @@ impl Particle {
 }
 
 pub struct Spring {
-    p1: Arc<RwLock<Particle>>,
-    p2: Arc<RwLock<Particle>>,
+    p1: Rc<RefCell<Particle>>,
+    p2: Rc<RefCell<Particle>>,
     base_len: f64,
     k: f64,
 }
 
 pub struct Mesh {
-    pub particles: Vec<Arc<RwLock<Particle>>>,
+    pub particles: Vec<Rc<RefCell<Particle>>>,
     pub springs: Vec<Spring>,
     max_vel: f64,
     damping: f64,
@@ -32,8 +33,8 @@ pub struct Mesh {
 impl Mesh {
     pub fn step(&mut self, time_step: f64) {
         for spring in &self.springs {
-            let mut p1 = spring.p1.write().expect("Unable to lock resource");
-            let mut p2 = spring.p2.write().expect("Unable to lock resource");
+            let mut p1 = spring.p1.borrow_mut();
+            let mut p2 = spring.p2.borrow_mut();
             let dist = p1.distance(&p2);
             let force = spring.k * (dist - spring.base_len);
             p1.vx += time_step * force * (p2.x - p1.x);
@@ -44,7 +45,7 @@ impl Mesh {
 
         let vdamp = self.damping.powf(time_step);
         for p in &self.particles {
-            let mut p = p.write().expect("Unable to lock resource");
+            let mut p = p.borrow_mut();
             p.vx *= vdamp;
             p.vy *= vdamp;
             let vmag = (p.vx * p.vx + p.vy * p.vy).sqrt();
@@ -63,7 +64,7 @@ impl Mesh {
         let mut springs = vec![];
         for row in 0..rows {
             for col in 0..cols {
-                let p = Arc::new(RwLock::new(Particle {
+                let p = Rc::new(RefCell::new(Particle {
                     x: x + col as f64 * spacing,
                     y: y + row as f64 * spacing,
                     vx: 0.0,
@@ -76,8 +77,8 @@ impl Mesh {
                     springs.push(Spring {
                         p1: p1.clone(),
                         p2: p2.clone(),
-                        base_len: p1.read().unwrap().distance(&p2.read().unwrap()),
-                        k: 0.8,
+                        base_len: p1.borrow().distance(&p2.borrow()),
+                        k: 10.0,
                     });
                 }
                 if row > 0 {
@@ -86,8 +87,8 @@ impl Mesh {
                     springs.push(Spring {
                         p1: p1.clone(),
                         p2: p2.clone(),
-                        base_len: p1.read().unwrap().distance(&p2.read().unwrap()),
-                        k: 0.8,
+                        base_len: p1.borrow().distance(&p2.borrow()),
+                        k: 10.0,
                     });
                 }
             }
@@ -105,12 +106,12 @@ impl Mesh {
         for (i1, particle) in particles.iter().enumerate() {
             for (i2, edge) in &edges {
                 if i1 != *i2 {
-                    let base_len = particle.read().unwrap().distance(&edge.read().unwrap());
+                    let base_len = particle.borrow().distance(&edge.borrow());
                     springs.push(Spring {
                         p1: particle.clone(),
                         p2: (*edge).clone(),
                         base_len: base_len,
-                        k: 5.0 / (base_len * base_len),
+                        k: 10.0 / (base_len * base_len),
                     })
                 }
             }
@@ -119,7 +120,7 @@ impl Mesh {
             particles: particles,
             springs: springs,
             max_vel: 100.0,
-            damping: 0.04,
+            damping: 0.01,
         }
     }
 }

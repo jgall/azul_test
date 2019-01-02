@@ -30,11 +30,11 @@ fn step_daemon(
         MeshApp::Started(state) => {
             if let Some(dragging) = &state.dragging {
                 let (x, y) = {
-                    let p = dragging.read().unwrap();
+                    let p = dragging.borrow();
                     (p.x.clone(), p.y.clone())
                 };
                 state.mesh.step(0.01);
-                let mut p = dragging.write().unwrap();
+                let mut p = dragging.borrow_mut();
                 p.x = x;
                 p.y = y;
             } else {

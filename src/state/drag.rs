@@ -6,7 +6,7 @@ pub fn do_drag(app_state: &mut AppState<MeshApp>, event: WindowEvent<MeshApp>) -
     app_state.data.modify(|state| match state {
         MeshApp::Started(state) => {
             if let Some(dragging) = &state.dragging {
-                let mut p = dragging.write().unwrap();
+                let mut p = dragging.borrow_mut();
                 p.x = event.cursor_in_viewport.0 as f64;
                 p.y = event.cursor_in_viewport.1 as f64;
             }

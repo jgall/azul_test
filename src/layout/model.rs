@@ -10,7 +10,7 @@ impl Layout for MeshApp {
         match self {
             Self::Started(state) => {
                 for p in &state.mesh.particles {
-                    let p = p.read().unwrap();
+                    let p = p.borrow();
                     dom.add_child(
                         Dom::div()
                             .with_class("particle")
