@@ -5,8 +5,10 @@ use super::mesh::*;
 
 pub enum MeshApp {
     Started(MeshAppState),
-    Uninitialized,
+    Uninitialized(Uninitialized),
 }
+
+pub struct Uninitialized {}
 
 pub struct MeshAppState {
     pub mesh: Mesh,

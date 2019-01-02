@@ -11,7 +11,7 @@ pub fn do_drag(app_state: &mut AppState<MeshApp>, event: WindowEvent<MeshApp>) -
                 p.y = event.cursor_in_viewport.1 as f64;
             }
         }
-        MeshApp::Uninitialized => (),
+        MeshApp::Uninitialized(_) => (),
     });
     UpdateScreen::Redraw
 }
@@ -25,7 +25,7 @@ pub fn start_drag(app_state: &mut AppState<MeshApp>, event: WindowEvent<MeshApp>
                 .and_then(|idx| state.mesh.particles.get(idx))
                 .map(|p| p.clone())
         }
-        MeshApp::Uninitialized => (),
+        MeshApp::Uninitialized(_) => (),
     });
     UpdateScreen::Redraw
 }
@@ -33,7 +33,7 @@ pub fn start_drag(app_state: &mut AppState<MeshApp>, event: WindowEvent<MeshApp>
 pub fn end_drag(app_state: &mut AppState<MeshApp>, _: WindowEvent<MeshApp>) -> UpdateScreen {
     app_state.data.modify(|state| match state {
         MeshApp::Started(state) => state.dragging = None,
-        MeshApp::Uninitialized => (),
+        MeshApp::Uninitialized(_) => (),
     });
     UpdateScreen::Redraw
 }

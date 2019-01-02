@@ -8,7 +8,7 @@ pub fn on_start_sim_btn_clicked(
     _: WindowEvent<MeshApp>,
 ) -> UpdateScreen {
     app_state.data.modify(|state| match state {
-        MeshApp::Uninitialized => {
+        MeshApp::Uninitialized(_) => {
             *state = MeshApp::Started(MeshAppState {
                 mesh: Mesh::new_grid(15.0, 20.0, 20.0, 20, 20),
                 dragging: None,
@@ -26,7 +26,7 @@ fn step_daemon(
     _app_resources: &mut AppResources,
 ) -> (UpdateScreen, TerminateDaemon) {
     match state {
-        MeshApp::Uninitialized => (UpdateScreen::DontRedraw, TerminateDaemon::Continue),
+        MeshApp::Uninitialized(_) => (UpdateScreen::DontRedraw, TerminateDaemon::Continue),
         MeshApp::Started(state) => {
             if let Some(dragging) = &state.dragging {
                 let (x, y) = {

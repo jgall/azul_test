@@ -1,8 +1,8 @@
 use azul::css::CssProperty;
 use azul::css::{LayoutLeft, LayoutTop};
-use azul::{prelude::*, widgets::button::Button};
+use azul::prelude::*;
 
-use super::super::state::{drag, model::MeshApp, start};
+use super::super::state::{drag, model::MeshApp};
 
 impl Layout for MeshApp {
     fn layout(&self, _info: WindowInfo<Self>) -> Dom<Self> {
@@ -29,11 +29,7 @@ impl Layout for MeshApp {
                 dom.with_callback(On::MouseOver, Callback(drag::do_drag))
                     .with_callback(On::MouseUp, Callback(drag::end_drag))
             }
-            Self::Uninitialized => dom.with_child(
-                Button::with_label("Start simulation")
-                    .dom()
-                    .with_callback(On::MouseUp, Callback(start::on_start_sim_btn_clicked)),
-            ),
+            Self::Uninitialized(u) => dom.with_child(u.dom()),
         }
     }
 }
