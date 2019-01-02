@@ -6,7 +6,6 @@ use super::super::state::{drag, model::MeshApp};
 
 impl Layout for MeshApp {
     fn layout(&self, _info: WindowInfo<Self>) -> Dom<Self> {
-        let dom = Dom::new(NodeType::Div);
         match self {
             Self::Started(state) => state
                 .mesh
@@ -24,10 +23,10 @@ impl Layout for MeshApp {
                         .with_callback(On::MouseDown, Callback(drag::start_drag))
                         .with_callback(On::MouseUp, Callback(drag::end_drag))
                 })
-                .fold(dom, |dom, p| dom.with_child(p))
+                .fold(Dom::new(NodeType::Div), |dom, p| dom.with_child(p))
                 .with_callback(On::MouseOver, Callback(drag::do_drag))
                 .with_callback(On::MouseUp, Callback(drag::end_drag)),
-            Self::Uninitialized(u) => dom.with_child(u.dom()),
+            Self::Uninitialized(u) => u.dom(),
         }
     }
 }
