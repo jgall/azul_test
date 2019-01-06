@@ -12,7 +12,7 @@ impl Particle {
     fn distance(&self, other: &Self) -> f64 {
         let dy = self.y - other.y;
         let dx = self.x - other.x;
-        (dy.powf(2 as f64) + dx.powf(2 as f64)).sqrt()
+        (dy.powf(f64::from(2)) + dx.powf(f64::from(2))).sqrt()
     }
 }
 
@@ -110,15 +110,15 @@ impl Mesh {
                     springs.push(Spring {
                         p1: particle.clone(),
                         p2: (*edge).clone(),
-                        base_len: base_len,
+                        base_len,
                         k: 10.0 / (base_len * base_len),
                     })
                 }
             }
         }
         Mesh {
-            particles: particles,
-            springs: springs,
+            particles,
+            springs,
             max_vel: 100.0,
             damping: 0.01,
         }

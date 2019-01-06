@@ -1,5 +1,6 @@
 use azul::prelude::*;
 
+use super::super::widgets::dropdown::*;
 use super::mesh::*;
 use super::model::*;
 
@@ -12,6 +13,15 @@ pub fn on_start_sim_btn_clicked(
             *state = MeshApp::Started(MeshAppState {
                 mesh: Mesh::new_grid(15.0, 20.0, 20.0, 20, 20),
                 dragging: None,
+                dropdown: DropdownState {
+                    open: false,
+                    selections: vec!["First", "Second", "Third"]
+                        .into_iter()
+                        .map(str::to_owned)
+                        .collect(),
+                    selected: None,
+                    unselected_label: Some("Select a type".to_owned()),
+                },
             })
         }
         MeshApp::Started(_) => (),
@@ -31,7 +41,7 @@ fn step_daemon(
             if let Some(dragging) = &state.dragging {
                 let (x, y) = {
                     let p = dragging.borrow();
-                    (p.x.clone(), p.y.clone())
+                    (p.x, p.y)
                 };
                 state.mesh.step(0.01);
                 let mut p = dragging.borrow_mut();

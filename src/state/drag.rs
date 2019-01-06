@@ -7,8 +7,8 @@ pub fn do_drag(app_state: &mut AppState<MeshApp>, event: WindowEvent<MeshApp>) -
         MeshApp::Started(state) => {
             if let Some(dragging) = &state.dragging {
                 let mut p = dragging.borrow_mut();
-                p.x = event.cursor_in_viewport.0 as f64;
-                p.y = event.cursor_in_viewport.1 as f64;
+                p.x = f64::from(event.cursor_in_viewport.0);
+                p.y = f64::from(event.cursor_in_viewport.1);
             }
         }
         MeshApp::Uninitialized(_) => (),
@@ -23,7 +23,7 @@ pub fn start_drag(app_state: &mut AppState<MeshApp>, event: WindowEvent<MeshApp>
                 .index_path_iter()
                 .next()
                 .and_then(|idx| state.mesh.particles.get(idx))
-                .map(|p| p.clone())
+                .cloned()
         }
         MeshApp::Uninitialized(_) => (),
     });
